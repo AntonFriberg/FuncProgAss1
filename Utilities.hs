@@ -12,9 +12,11 @@ mmap :: (a -> b) -> Maybe a -> Maybe b
 mmap f  Nothing  = Nothing
 mmap f (Just x)  = Just (f x)
 
+--Takes two Maybe values and returns one. If one of the values is Nothing returns the other.
 orElse :: Maybe a -> Maybe a -> Maybe a
 orElse Nothing  x  = x
 orElse (Just a) _  = Just a
+
 
 try :: (a -> Maybe a) -> a -> a
 try f x = maybe x id (f x)
