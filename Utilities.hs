@@ -29,7 +29,7 @@ fix f x
    |  f x == x  = x
    |  otherwise = fix f (f x)
 
--- Select the first element in the list > the r:th percentile
+-- Select the first element in the list that is > the r:th percentile mark
 -- Ex: pick 0.5 [1..10] == 0.6
 pick :: RealFrac r => r -> [a] -> a
 pick u xs = xs !! (floor.(u*).fromIntegral.length) xs
