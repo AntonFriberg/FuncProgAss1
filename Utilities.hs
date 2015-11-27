@@ -1,8 +1,12 @@
 module Utilities where
 
+-- Takes a tuple of functions f1 and f2, and a tuple of 
+-- values x1 and x2 and returns a tuple of values where
+-- f1 has been applied to x1 and f2 to x2
 map2 :: (a -> b, c -> d) -> (a, c) -> (b, d)
 map2 (f1, f2) (x1, x2) = (f1 x1, f2 x2)
 
+-- 
 mmap :: (a -> b) -> Maybe a -> Maybe b
 mmap f  Nothing  = Nothing
 mmap f (Just x)  = Just (f x)
