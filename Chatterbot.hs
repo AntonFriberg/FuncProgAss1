@@ -127,7 +127,8 @@ match wc (p:ps) (x:xs)
 singleWildcardMatch, longerWildcardMatch :: Eq a => [a] -> [a] -> Maybe [a]
 
 -- At least one x == wc. We need to return a list. If match returns Nothing,
--- then we need to return Nothing.
+-- then we need to return Nothing. Shouldn't have to define edge cases since
+-- those are taken care of in match.
 singleWildcardMatch (wc:ps) (x:xs)  = mmap (const [x]) $ match wc ps xs
 longerWildcardMatch (wc:ps) (x:xs)  = mmap (x:) $ match wc (wc:ps) xs
 
