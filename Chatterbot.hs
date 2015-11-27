@@ -153,12 +153,13 @@ matchCheck = matchTest == Just testSubstitutions
 
 -- Applying a single pattern
 transformationApply :: Eq a => a -> ([a] -> [a]) -> [a] -> ([a], [a]) -> Maybe [a]
-transformationApply wc tr xs (p1, p2) = mmap (substitute wc p2) $ id $ match wc p1 xs
+transformationApply wc f xs (p1, p2) = mmap (substitute wc p2) $ mmap f $ match wc p1 xs
 
 
 -- Applying a list of patterns until one succeeds
 transformationsApply :: Eq a => a -> ([a] -> [a]) -> [([a], [a])] -> [a] -> Maybe [a]
-transformationsApply _ _ _ _ = Nothing
-{- TO BE WRITTEN -}
+transformationsApply _ _ [] _ = Nothing
+transformationsApply _ _ _ [] = Just []
+transformationsApply wc f patternList xs = foldl1 orElse (map (transformationApply wc f xs) patternList)
 
 
