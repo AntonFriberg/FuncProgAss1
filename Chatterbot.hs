@@ -153,8 +153,7 @@ matchCheck = matchTest == Just testSubstitutions
 
 -- Applying a single pattern
 transformationApply :: Eq a => a -> ([a] -> [a]) -> [a] -> ([a], [a]) -> Maybe [a]
-transformationApply _ _ _ _ = Nothing
-{- TO BE WRITTEN -}
+transformationApply wc tr xs (p1, p2) = mmap (substitute wc p2) $ id $ match wc p1 xs
 
 
 -- Applying a list of patterns until one succeeds
