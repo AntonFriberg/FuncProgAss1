@@ -105,24 +105,31 @@ reductionsApply _ = id
 
 -- Replaces a wildcard in a list with the list given as the third argument
 substitute :: Eq a => a -> [a] -> [a] -> [a]
-substitute _ _ _ = []
-{- TO BE WRITTEN -}
+substitute _ [] _ = []
+substitute wc (x:xs) ys
+  | x /= wc       = x: substitute wc xs ys
+  | otherwise     = ys ++ substitute wc xs ys
 
 
 -- Tries to match two lists. If they match, the result consists of the sublist
 -- bound to the wildcard in the pattern list.
 match :: Eq a => a -> [a] -> [a] -> Maybe [a]
-match _ _ _ = Nothing
-{- TO BE WRITTEN -}
-
+match _ [] [] = Just []
+match _ [] _ = Nothing
+match _ _ [] = Nothing
+match wc (p:ps) (x:xs)
+  | p == x        = match wc ps xs
+  | p /= wc       = Nothing
+  | otherwise     = singleWildcardMatch (p:ps) (x:xs)
+                    `orElse` longerWildcardMatch (p:ps) (x:xs)
 
 -- Helper function to match
 singleWildcardMatch, longerWildcardMatch :: Eq a => [a] -> [a] -> Maybe [a]
-singleWildcardMatch (wc:ps) (x:xs) = Nothing
-{- TO BE WRITTEN -}
-longerWildcardMatch (wc:ps) (x:xs) = Nothing
-{- TO BE WRITTEN -}
 
+-- At least one x == wc. We need to return a list. If match returns Nothing,
+-- then we need to return Nothing.
+singleWildcardMatch (wc:ps) (x:xs)  = mmap (const [x]) $ match wc ps xs
+longerWildcardMatch (wc:ps) (x:xs)  = mmap (x:) $ match wc (wc:ps) xs
 
 
 -- Test cases --------------------
