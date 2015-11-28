@@ -29,9 +29,9 @@ stateOfMind :: BotBrain -> IO (Phrase -> Phrase)
 {- TO BE WRITTEN -}
 stateOfMind _ = return id
 
+-- try, since we want some result
 rulesApply :: [PhrasePair] -> Phrase -> Phrase
-
-rulesApply _ = id
+rulesApply = try . transformationsApply "*" reflect
 
 -- flip swaps the two first arguments that follow
 -- lookup gets a 'value' for a corresponding 'key' in a list of tuples
@@ -161,6 +161,6 @@ transformationApply wc f xs (p1, p2) = mmap (substitute wc p2) $ mmap f $ match 
 transformationsApply :: Eq a => a -> ([a] -> [a]) -> [([a], [a])] -> [a] -> Maybe [a]
 transformationsApply _ _ [] _ = Nothing
 transformationsApply _ _ _ [] = Just []
-transformationsApply wc f patternList xs = foldl1 orElse (map (transformationApply wc f xs) patternList)
+transformationsApply wc f patternList xs = foldl1 orElse $ map (transformationApply wc f xs) patternList
 
 
