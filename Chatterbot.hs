@@ -25,9 +25,13 @@ type BotBrain = [(Phrase, [Phrase])]
 
 --------------------------------------------------------
 
+-- map2 applied on (single) botBrain: tuple (id Phrase, pick random Phrase from list)
+-- map: above on whole list of botBrain
+-- rulesApply: on all resulting phrases
 stateOfMind :: BotBrain -> IO (Phrase -> Phrase)
-{- TO BE WRITTEN -}
-stateOfMind _ = return id
+stateOfMind botBrain = do
+  r <- randomIO :: IO Float
+  return $ rulesApply $ (map . map2) (id, pick r) botBrain
 
 -- try, since we want some result
 rulesApply :: [PhrasePair] -> Phrase -> Phrase
@@ -66,12 +70,14 @@ endOfDialog = (=="quit") . map toLower
 present :: Phrase -> String
 present = unwords
 
+-- Make all chars lowercase, except for 'special characters'.
+-- Apply reduction on results after converting string to list
 prepare :: String -> Phrase
 prepare = reduce . words . map toLower . filter (not . flip elem ".,:;*!#%&|") 
 
+-- Create the BotBrain by compiling a structure such as the one given in Eliza.hs
 rulesCompile :: [(String, [String])] -> BotBrain
-{- TO BE WRITTEN -}
-rulesCompile _ = []
+rulesCompile = (map . map2) (words . map toLower, map words)
 
 
 --------------------------------------
