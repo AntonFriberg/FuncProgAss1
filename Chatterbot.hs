@@ -30,12 +30,13 @@ stateOfMind :: BotBrain -> IO (Phrase -> Phrase)
 stateOfMind _ = return id
 
 rulesApply :: [PhrasePair] -> Phrase -> Phrase
-{- TO BE WRITTEN -}
+
 rulesApply _ = id
 
+-- flip swaps the two first arguments that follow
+-- lookup gets a 'value' for a corresponding 'key' in a list of tuples
 reflect :: Phrase -> Phrase
-{- TO BE WRITTEN -}
-reflect = id
+reflect = map $ try $ flip lookup reflections
 
 reflections =
   [ ("am",     "are"),
