@@ -35,7 +35,10 @@ stateOfMind botBrain = do
 
 -- try, since we want some result
 rulesApply :: [PhrasePair] -> Phrase -> Phrase
-rulesApply = try . transformationsApply "*" reflect
+--rulesApply = try . transformationsApply "*" reflect
+rulesApply phrasePairs = maybe [] id . (transformationsApply "*" reflect phrasePairs)
+
+
 
 -- flip swaps the two first arguments that follow
 -- lookup gets a 'value' for a corresponding 'key' in a list of tuples
@@ -163,7 +166,6 @@ matchCheck = matchTest == Just testSubstitutions
 -- Applying a single pattern
 transformationApply :: Eq a => a -> ([a] -> [a]) -> [a] -> ([a], [a]) -> Maybe [a]
 transformationApply wc f xs (p1, p2) = mmap (substitute wc p2) $ mmap f $ match wc p1 xs
-
 
 -- Applying a list of patterns until one succeeds
 transformationsApply :: Eq a => a -> ([a] -> [a]) -> [([a], [a])] -> [a] -> Maybe [a]

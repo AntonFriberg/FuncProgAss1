@@ -18,7 +18,7 @@ orElse :: Maybe a -> Maybe a -> Maybe a
 orElse Nothing  x  = x
 orElse (Just a) _  = Just a
 
--- If f(x) returns nothing, then return f(x). Else return x.
+-- If f(x) returns nothing, then return x. Else return f(x).
 try :: (a -> Maybe a) -> a -> a
 try f x = maybe x id (f x)
 
