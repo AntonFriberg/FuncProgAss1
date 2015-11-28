@@ -101,9 +101,12 @@ reductions = (map.map2) (words, words)
 reduce :: Phrase -> Phrase
 reduce = reductionsApply reductions
 
+-- transformationsApply with id just returns the first phrase that is
+-- successfully reduced in the list of PhrasePairs.
+-- fix is used to 'reapply' this process on the list until it no longer
+-- changes when it is applied.
 reductionsApply :: [PhrasePair] -> Phrase -> Phrase
-{- TO BE WRITTEN -}
-reductionsApply _ = id
+reductionsApply = fix . try . transformationsApply "*" id 
 
 
 -------------------------------------------------------
@@ -151,7 +154,6 @@ substituteCheck = substituteTest == testString
 
 matchTest = match '*' testPattern testString
 matchCheck = matchTest == Just testSubstitutions
-
 
 
 -------------------------------------------------------
