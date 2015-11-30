@@ -6,8 +6,8 @@ module Utilities where
 map2 :: (a -> b, c -> d) -> (a, c) -> (b, d)
 map2 (f1, f2) (x1, x2) = (f1 x1, f2 x2)
 
--- Applies a function to a Just value and incaplsulates it inside Just 
--- before return. 
+-- Takes a function f and an argument x. If the argument is a Nothing, returns
+-- Nothing -> otherwise returns the unction value encapsulated in a Just
 mmap :: (a -> b) -> Maybe a -> Maybe b
 mmap f  Nothing  = Nothing
 mmap f (Just x)  = Just (f x)

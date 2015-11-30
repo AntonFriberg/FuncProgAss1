@@ -164,13 +164,22 @@ matchCheck = matchTest == Just testSubstitutions
 --------------------------------------------------------
 
 -- Applying a single pattern
+-- First we match the wildcard with the appropriate string and then we check
+-- if the transformation f can be applied to the string (using mmap).
+-- We then try to do our substitution on the resulting string.
 transformationApply :: Eq a => a -> ([a] -> [a]) -> [a] -> ([a], [a]) -> Maybe [a]
-transformationApply wc f xs (p1, p2) = mmap (substitute wc p2) $ mmap f $ match wc p1 xs
+transformationApply wc f xs (p1, p2)  = mmap (substitute wc p2)
+                                      $ mmap f $ match wc p1 xs
 
 -- Applying a list of patterns until one succeeds
+-- We map the transformationApply to all patterns in the list. Then we foldl
+-- applying an orElse which results in the FIRST Just value in the list being
+-- returned.
 transformationsApply :: Eq a => a -> ([a] -> [a]) -> [([a], [a])] -> [a] -> Maybe [a]
 transformationsApply _ _ [] _ = Nothing
 transformationsApply _ _ _ [] = Just []
-transformationsApply wc f patternList xs = foldl1 orElse $ map (transformationApply wc f xs) patternList
+transformationsApply wc f patternList xs  = foldl1 orElse
+                                          $ map (transformationApply wc f xs)
+                                                patternList
 
 
